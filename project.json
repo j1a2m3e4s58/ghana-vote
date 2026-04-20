@@ -1,0 +1,24 @@
+{
+  "overview": "A secure, modern online voting platform simulating Ghana presidential elections. Voters register with their Ghana Card ID, cast a single anonymous ballot from a list of candidates, and admins manage the election in real time.",
+  "features": [
+    "Voter registration with Ghana Card ID and password",
+    "Secure login with username and password",
+    "Candidate list with party name and photo",
+    "One vote per voter with confirmation step",
+    "Admin dashboard with live vote count updates",
+    "Admin controls to start and stop the election",
+    "Candidate management (add, edit, remove)",
+    "Ghana-themed red, gold, and green design"
+  ],
+  "category": "government-civic",
+  "tags": [
+    "voting",
+    "elections",
+    "ghana",
+    "civic",
+    "admin-dashboard",
+    "authorization",
+    "object-storage"
+  ],
+  "last_updated": "2026-04-20T18:47:09.818Z"
+}

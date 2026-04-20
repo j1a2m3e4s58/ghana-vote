@@ -1,0 +1,95 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type VoterId = text;
+type VoteResult = 
+ variant {
+   err: record {message: text;};
+   ok;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UpdateCandidatePayload = 
+ record {
+   id: CandidateId;
+   name: text;
+   party: text;
+   photo: ExternalBlob;
+ };
+type RegisterResult = 
+ variant {
+   err: record {message: text;};
+   ok;
+ };
+type LoginResult = 
+ variant {
+   err: record {message: text;};
+   ok: record {token: text;};
+ };
+type ExternalBlob = blob;
+type ElectionStatus = 
+ variant {
+   closed;
+   open;
+ };
+type ElectionResults = 
+ record {
+   candidates: vec CandidateInfo;
+   electionStatus: ElectionStatus;
+   totalVotes: nat;
+ };
+type CandidateInfo = 
+ record {
+   id: CandidateId;
+   name: text;
+   party: text;
+   photo: ExternalBlob;
+   voteCount: nat;
+ };
+type CandidateId = nat;
+type AddCandidatePayload = 
+ record {
+   name: text;
+   party: text;
+   photo: ExternalBlob;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  addCandidate: (payload: AddCandidatePayload) -> (CandidateId);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  castVote: (ghanaCardId: VoterId, candidateId: CandidateId) -> (VoteResult);
+  deleteCandidate: (id: CandidateId) -> (bool);
+  getCallerUserRole: () -> (UserRole) query;
+  getCandidates: () -> (vec CandidateInfo) query;
+  getElectionStatus: () -> (ElectionStatus) query;
+  getResults: () -> (ElectionResults) query;
+  isCallerAdmin: () -> (bool) query;
+  login: (ghanaCardId: VoterId, passwordHash: text) -> (LoginResult);
+  registerVoter: (ghanaCardId: VoterId, phone: text, passwordHash: text) ->
+   (RegisterResult);
+  setElectionStatus: (status: ElectionStatus) -> ();
+  updateCandidate: (payload: UpdateCandidatePayload) -> (bool);
+}
